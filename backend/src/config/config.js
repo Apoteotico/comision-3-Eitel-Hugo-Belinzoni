@@ -1,3 +1,4 @@
+export const TOKEN_SECRET = 'some secret key';
 import dotenv from "dotenv"; 
 
 dotenv.config();
@@ -18,4 +19,5 @@ export const settingDotEnvDb = () => {
 export const settingSecretToken = () => {
   return { secret: process.env.SECRET };
 };
+
 

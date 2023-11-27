@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import {settingDotEnvDb} from "../config/config.js";
 
 const { db } = settingDotEnvDb();
+
 export const connectDB = async () => {
   try {
     await mongoose.connect(db.localhost);
