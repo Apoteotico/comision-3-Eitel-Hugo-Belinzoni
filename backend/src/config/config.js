@@ -5,7 +5,7 @@ dotenv.config();
 
 //puerto 
 export const settingDotEnvPort = () => {
-  return { port: process.env.PORT };
+  return { port: process.env.PORT || 4000};
 };
 //base de datos 
 export const settingDotEnvDb = () => {
