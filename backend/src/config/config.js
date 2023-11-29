@@ -1,4 +1,3 @@
-export const TOKEN_SECRET = 'some secret key';
 import dotenv from "dotenv"; 
 
 dotenv.config();

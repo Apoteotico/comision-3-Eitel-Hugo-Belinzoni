@@ -1,4 +1,4 @@
-import mongoose from "mongoose"
+import mongoose from "mongoose";
 
 const postSchema = new mongoose.Schema(
   {
@@ -14,14 +14,14 @@ const postSchema = new mongoose.Schema(
       required: true,
     },
     autor: {
-      type: String,
+      type: mongoose.Schema.ObjectId,
       trim: true,
       required: true,
     },
-    comments: {
-      type: String,
-      required: false,
-    },
+    comments: [{
+      type: mongoose.Schema.ObjectId,
+      ref: "Comment"
+    }],
     imageURL: {
       type: String,
       required: false,
@@ -29,16 +29,7 @@ const postSchema = new mongoose.Schema(
     createdAt: {
       type: Date,
       default: Date.now,
-    },
-    updatedAt: {
-      type: Date,
-      default: null,
-    },
-  },
-  {
-    timestamps: true,
-    versionKey: false,
-  }
-);
+    }
+  }, { timestamps: true, versionKey: false });
 
-export default mongoose.model('Post', postSchema)
+export default mongoose.model("Post", postSchema);
