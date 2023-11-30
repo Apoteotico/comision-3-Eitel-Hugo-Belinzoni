@@ -19,8 +19,8 @@ export const createPost = async (req, res) => {
     const newPost = new Post({
       title,
       description,
-      autor: req.user.id,
       comments,
+      autor: req.user.id,
       imageURL
     });
 

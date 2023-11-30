@@ -16,7 +16,7 @@ router.post('/comments/:postId', authRequired, createComment);
 // Eliminar un comentario
 router.delete('/comments/:id', authRequired, deleteComment);
 
-// Actualizar un comentario
+// Editar/actualizar un comentario
 router.put('/comments/:id', authRequired, updateComment); 
 
 export default router;
