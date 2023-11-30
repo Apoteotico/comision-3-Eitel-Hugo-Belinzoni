@@ -19,10 +19,10 @@ const postSchema = new Schema(
       required: true,
       ref: "User"
     },
-   /*  comments: [{
+    comments: [{
       type: Schema.Types.ObjectId,
       ref: "Comment"
-    }], */
+    }], 
     imageURL: {
       type: String,
       required: false,

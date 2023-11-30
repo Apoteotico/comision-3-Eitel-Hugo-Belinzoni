@@ -9,7 +9,7 @@ export const authRequired = (req, res, next) => {
   console.log(req.headers.cookie);
 
   const { token } = req.cookies;
-  //   console.log(token);
+  
   if (!token)
     return res
       .status(401)
@@ -17,7 +17,7 @@ export const authRequired = (req, res, next) => {
 
   jwt.verify(token, secret, (err, user) => {
     if (err) return res.status(403).json({ message: "Token inválido" });
-    // console.log(user);
+    
     req.user = user;
   });
 

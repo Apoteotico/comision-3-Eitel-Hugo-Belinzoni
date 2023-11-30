@@ -1,28 +1,23 @@
 import { Router } from "express";
 import { authRequired } from "../middlewares/auth.jwt.js";
-import {
-  getComments,
-  getComment,
-  createComment,
-  updateComment,
-  deleteComment,
-} from "../controllers/comment.controller.js";
+import { createComment, deleteComment, getComment, getComments, updateComment } from "../controllers/comment.controller.js";
+
 
 const router = Router();
 
 // Traer todos los comentarios
-router.get('/comments', authRequired, getComments);
+router.get('/comments', getComments);
 
 // Traer un comentario por ID
-router.get('/comments/:id', authRequired, getComment);
+router.get('/comments/:id', getComment);
 
 // Crear un comentario
-router.post('/comments', authRequired, createComment);
+router.post('/comments/:postId', createComment);
 
 // Eliminar un comentario
 router.delete('/comments/:id', authRequired, deleteComment);
 
 // Actualizar un comentario
-router.put('/comments/:id', authRequired, updateComment);
+router.put('/comments/:id', authRequired, updateComment); 
 
 export default router;

@@ -1,34 +1,33 @@
 import Post from "../models/post.model.js";
 
-
 // Obtener todos los posts
 export const getPosts = async (req, res) => {
-  res.json({message:"posteooos all"})
 
-  /*   try {
+    try {
     const posts = await Post.find();
     res.status(200).json(posts);
   } catch (error) {
     res.status(500).json({ error: "Error al obtener los posts" });
-  } */
+  } 
 };
 
 // Crear un nuevo post
 export const createPost = async (req, res) => {
-  const { title, content, author, imageURL } = req.body;
+  const { title, description, comments, imageURL } = req.body;
 
   try {
     const newPost = new Post({
       title,
-      content,
-      author,
-      imageURL,
+      description,
+      autor: req.user.id,
+      comments,
+      imageURL
     });
 
     const savedPost = await newPost.save();
-    res.status(201).json(savedPost);
+    res.status(200).json(savedPost);
   } catch (error) {
-    res.status(500).json({ error: "Error al crear el post" });
+    res.status(400).json({ error: "Error al crear el post" });
   }
 };
 
@@ -50,12 +49,12 @@ export const getPost = async (req, res) => {
 // Actualizar un post por ID
 export const updatePost = async (req, res) => {
   const postId = req.params.id;
-  const { title, content, imageURL } = req.body;
+  const { title, comments, imageURL } = req.body;
 
   try {
     const updatedPost = await Post.findByIdAndUpdate(
       postId,
-      { title, content, imageURL },
+      { title, comments, imageURL },
       { new: true }
     );
 
