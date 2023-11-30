@@ -4,10 +4,15 @@ import {getPosts, getPost, createPost, updatePost, deletePost, } from "../contro
 
 const router = Router()
 
-router.get('/posts', authRequired, getPosts);
-router.get('/posts/:id', authRequired, getPost);
+//traer todos los postsss
+router.get('/posts', getPosts);
+//
+router.get('/posts/:id', getPost);
+//
 router.post('/posts', authRequired, createPost);
+//
 router.delete('/posts/:id', authRequired, deletePost);
+//
 router.put('/posts/:id', authRequired, updatePost);
 
-export default router
+export default router;

@@ -17,11 +17,12 @@ const postSchema = new Schema(
       type: Schema.Types.ObjectId,
       trim: true,
       required: true,
+      ref: "User"
     },
     comments: [{
       type: Schema.Types.ObjectId,
       ref: "Comment"
-    }],
+    }], 
     imageURL: {
       type: String,
       required: false,
