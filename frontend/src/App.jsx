@@ -2,7 +2,10 @@ import React from 'react'
 
 function App() {
   return (
-    <div>Hola Pizza sos mi Mundo</div>
+    <>
+    <h1>Amo la Pizza</h1>
+    
+    </>
   )
 }
 
