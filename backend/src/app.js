@@ -12,6 +12,7 @@ import CommentRouter from "./routes/comment.routes.js";
 const app = express();
 
 //Middlewares
+
 app.use(express.json()); 
 app.use(helmet());
 app.use(morgan("dev"));
