@@ -5,11 +5,11 @@ import { settingSecretToken } from "../config/config.js";
 
 const { secret } = settingSecretToken();
 
-export const authRequired = (req, res, next) => {  
+export const authRequired = (req, res, next) => {
   console.log(req.headers.cookie);
 
   const { token } = req.cookies;
-  
+
   if (!token)
     return res
       .status(401)
@@ -17,7 +17,7 @@ export const authRequired = (req, res, next) => {
 
   jwt.verify(token, secret, (err, user) => {
     if (err) return res.status(403).json({ message: "Token inválido" });
-    
+
     req.user = user;
   });
 
