@@ -1,18 +1,31 @@
 import { Router } from "express";
 import { authRequired } from "../middlewares/auth.jwt.js";
-import {getPosts, getPost, createPost, updatePost, deletePost, } from "../controllers/post.controllers.js";
+import {
+  getPosts,
+  getPost,
+  createPost,
+  updatePost,
+  deletePost,
+} from "../controllers/post.controllers.js";
+import { validateSchema } from "../middlewares/validator.middleware.js";
+import { createPostSchema } from "../schemas/post.schema.js";
 
-const router = Router()
+const router = Router();
 
 //traer todos los postsss
-router.get('/posts', getPosts);
+router.get("/posts", getPosts);
 //
-router.get('/posts/:id', getPost);
+router.get("/posts/:id", getPost);
 //
-router.post('/posts', authRequired, createPost);
+router.post(
+  "/posts",
+  authRequired,
+  validateSchema(createPostSchema),
+  createPost
+);
 //
-router.delete('/posts/:id', authRequired, deletePost);
+router.delete("/posts/:id", authRequired, deletePost);
 //
-router.put('/posts/:id', authRequired, updatePost);
+router.put("/posts/:id", authRequired, updatePost);
 
 export default router;
