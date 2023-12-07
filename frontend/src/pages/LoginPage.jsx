@@ -13,7 +13,7 @@ function LoginPage() {
   const onSubmit = handleSubmit((data) => {
     signin(data);
   });
-
+  console.log(signinErrors);
   return (
     <div className="flex h-screen items-center justify-center ">
       <div className="bg-zinc-800 max-w-md p-5 rounded-md ">
@@ -47,8 +47,10 @@ function LoginPage() {
             Login
           </button>
         </form>
-        <p className="flex justify-between px-4 py-2">
-          ¿No Tienes una cuenta registrada?
+
+       {/*  flex justify-between mt-10 */}
+        <p className="flex justify-between px-4 py-2 ">
+          ¿No tienes una cuenta registrada?
           <Link
             to="/register"
             className="px-3 font-semibold rounded-md text-black bg-cyan-400"
@@ -56,6 +58,7 @@ function LoginPage() {
             Register
           </Link>
         </p>
+
         {signinErrors.map((error, i) => (
           <div
             className="bg-red-500 p-2 text-white px-4 py-2 rounded-md my-2"
@@ -63,11 +66,10 @@ function LoginPage() {
           >
             {error}
           </div>
-        ))}      
+        ))}
       </div>
     </div>
   );
 }
 
 export default LoginPage;
-

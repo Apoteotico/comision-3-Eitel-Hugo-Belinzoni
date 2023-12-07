@@ -20,11 +20,11 @@ const [errors, setErrors] = useState([]);
     try {
       //validando que todo va bien
       const res = await registerRequest(user);
-      console.log(res.data);
+      console.log(res);
       setUser(res.data);
       setIsAuthenticated(true);
     } catch (error) {
-      console.log(error)
+      console.log(error.response)
       setErrors(error.response.data);
     }
   };
@@ -33,7 +33,7 @@ const [errors, setErrors] = useState([]);
     try {
       //validando que todo va bien
       const res = await loginRequest(user);
-      console.log(res.data);
+      console.log(res);
     } catch (error) {
      // console.error(error)
       setErrors(error.response.data); 

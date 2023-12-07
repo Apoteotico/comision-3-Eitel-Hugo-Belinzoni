@@ -65,7 +65,7 @@ function RegisterPage() {
           </button>
         </form>
         <p className="flex justify-between px-4 py-2">
-          ¿Ya Tienes una cuenta registrada?
+          ¿Ya tienes una cuenta registrada?
           <Link
             to="/login"
             className="px-3 font-semibold rounded-md text-black bg-cyan-400"
