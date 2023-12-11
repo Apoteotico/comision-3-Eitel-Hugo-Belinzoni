@@ -2,7 +2,7 @@ import User from "../models/user.model.js";
 import bcrypt from "bcrypt";
 import { createAccessToken } from "../libs/jwt.js";
 import jwt from "jsonwebtoken";
-import { settingSecretToken } from "../config/config.js";
+import { SECRET } from "../config/config.js";
 
 export const register = async (req, res) => {
   const { email, password, username, avatarURL } = req.body;
@@ -53,7 +53,7 @@ export const login = async (req, res) => {
       res.cookie("token", token, {
         httpOnly: true,
         sameSite: "none",
-        secure: false,
+        secure: true,
       });
       /*   httpOnly: process.env.NODE_ENV !== "development",*/
       /*   secure: true, 
@@ -94,12 +94,13 @@ export const profile = async (req, res) => {
 };
 
 //metodo verify
-export const verifyToken = async (req, res) => {
+
+export const verify = async (req, res) => {
   const { token } = req.cookies;
 
   if (!token) return res.send(false);
 
-  jwt.verify(token, settingSecretToken, async (error, user) => {
+  jwt.verify(token, SECRET, async (error, user) => {
     if (error) return res.sendStatus(401).json({ message: "Unauthorized" });
 
     const userFound = await User.findById(user.id);

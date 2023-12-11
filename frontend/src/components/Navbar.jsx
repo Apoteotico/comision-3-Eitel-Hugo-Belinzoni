@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { ButtonLink} from "./UI/ButtonLink";
+import { ButtonLink} from "./ui/ButtonLink";
 
 export function Navbar() {
   const { isAuthenticated, logout, user } = useAuth();

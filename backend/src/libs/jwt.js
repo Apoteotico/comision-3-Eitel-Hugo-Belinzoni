@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
-import { settingSecretToken } from "../config/config.js";
+import { SECRET} from "../config/config.js";
 
-const { secret } = settingSecretToken();
+const { secret } = SECRET();
 
 export const createAccessToken = (payload) => {
   return new Promise((resolve, reject) => {

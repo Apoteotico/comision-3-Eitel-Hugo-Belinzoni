@@ -18,7 +18,7 @@ function RegisterPage() {
   }, [isAuthenticated]);
 
   const onSubmit = handleSubmit(async (values) => {
-    signup(values);
+    await signup(values);
   });
 
   return (

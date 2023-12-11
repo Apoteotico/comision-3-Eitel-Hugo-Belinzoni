@@ -1,9 +1,8 @@
 import jwt from "jsonwebtoken";
-import { settingSecretToken } from "../config/config.js";
-//import userModel from "../models/user.model.js";
-//import Role from "../models/Role.js";
+import { SECRET } from "../config/config.js";
 
-const { secret } = settingSecretToken();
+
+const { secret } = SECRET();
 
 export const authRequired = (req, res, next) => {
   console.log(req.headers.cookie);

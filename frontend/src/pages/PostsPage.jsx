@@ -1,14 +1,14 @@
-
+/* 
 function PostsPage() {
   return (
     <div>PostsPage</div>
   )
-}
+} */
 
 export default PostsPage
-/* import { useEffect } from "react";
+import { useEffect } from "react";
 import { usePosts } from "../context/postsContext"; 
-
+import { PostCard} from "../components/posts/PostCard";
 import { ImFileEmpty } from "react-icons/im";
 
 export function PostsPage() {
@@ -39,4 +39,3 @@ export function PostsPage() {
     </>
   );
 }
- */
