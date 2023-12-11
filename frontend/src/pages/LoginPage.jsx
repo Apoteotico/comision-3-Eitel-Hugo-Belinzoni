@@ -13,7 +13,9 @@ function LoginPage() {
   const onSubmit = handleSubmit((data) => {
     signin(data);
   });
-  console.log(signinErrors);
+  
+  /* console.log(signinErrors); */
+
   return (
     <div className="flex h-screen items-center justify-center ">
       <div className="bg-zinc-800 max-w-md p-5 rounded-md ">

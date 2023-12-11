@@ -1,5 +1,6 @@
-import { createContext, useState, useContext } from "react";
-import { registerRequest, loginRequest } from "../api/auth";
+import { createContext, useState, useContext, useEffect } from "react";
+import { registerRequest, loginRequest, verifyTokenRequest } from "../api/auth";
+import Cookies from "js-cookie";
 
 export const AuthContext = createContext();
 
@@ -14,7 +15,9 @@ export const useAuth = () => {
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-const [errors, setErrors] = useState([]);
+  const [errors, setErrors] = useState([]);
+  const [loading, setLoading] = useState(true);
+
 
   const signup = async (user) => {
     try {
@@ -23,8 +26,9 @@ const [errors, setErrors] = useState([]);
       console.log(res);
       setUser(res.data);
       setIsAuthenticated(true);
+      localStorage.setItem("token", res.data.message);
     } catch (error) {
-      console.log(error.response)
+      console.log(error.response);
       setErrors(error.response.data);
     }
   };
@@ -34,11 +38,103 @@ const [errors, setErrors] = useState([]);
       //validando que todo va bien
       const res = await loginRequest(user);
       console.log(res);
+      setIsAuthenticated(true);
+      setUser(res.data);
+      console.log(res.data, "authcontext 42")
+      localStorage.setItem("token", res.data.message); //guardar el token
     } catch (error) {
-     // console.error(error)
-      setErrors(error.response.data); 
+      console.error(error)
+      if (Array.isArray(error.response.data)) {
+        return setErrors(error.response.data);
+      }
+      setErrors([error.response.data.message]);
     }
   };
+
+  // clear errors after 6 seconds
+  useEffect(() => {
+    if (errors.length > 0) {
+      const timer = setTimeout(() => {
+        setErrors([]);
+      }, 4000);
+      return () => clearTimeout(timer);
+    }
+  }, [errors]);
+
+// remover cookie token
+  const logout = () => {
+    Cookies.remove("token");
+    localStorage.removeItem("token"); //para remover el token del localStorage
+    setUser(null);
+    setIsAuthenticated(false);
+  };
+
+
+  //cookies 3:09:00
+  //si este no funciona usar el ultimo probado
+  useEffect(() => {
+    const checkLogin = async () => {
+      const cookies = Cookies.get();
+
+      if (!cookies.token) {
+        setIsAuthenticated(false);
+        setLoading(false);
+        return setUser(null);
+      }
+      try {
+        const res = await verifyTokenRequest(cookies.token);
+        console.log(res);
+        console.log(res.data);
+        if (!res.data) return setIsAuthenticated(false);
+        setIsAuthenticated(true);
+        setUser(res.data);
+        console.log(res.data);
+        setLoading(false);
+      } catch (error) {
+        console.log(error, "error cookies?");
+        setIsAuthenticated(false);
+        setLoading(false);
+      }
+    };
+    checkLogin();
+  }, []);
+ /* ultimo probado
+  useEffect(() => {
+    const checkLogin = async () => {
+      const cookies = Cookies.get();
+
+      if (!cookies.token) {
+        setIsAuthenticated(false);
+        setLoading(false);
+        return setUser(null);
+      }
+      try {
+        const res = await verifyTokenRequest(cookies.token);
+        console.log(res);
+        if (!res.data) return setIsAuthenticated(false);
+        setIsAuthenticated(true);
+        setUser(res.data);
+        setLoading(false);
+      } catch (error) {
+        console.log(error, "error cookies?");
+        setIsAuthenticated(false);
+        setLoading(false);
+      }
+    };
+    checkLogin();
+  }, []); */
+/*   useEffect(() => {
+    const cookies = Cookies.get();
+console.log(cookies)
+    if (cookies.token) {
+      verifyTokenRequest(cookies.token)
+      console.log(cookies.token); 
+    }
+  }, []);
+ */
+
+//3:09min
+ 
 
 
   return (
@@ -46,9 +142,11 @@ const [errors, setErrors] = useState([]);
       value={{
         signup,
         signin,
+        logout,
+        loading,
         user,
         isAuthenticated, //para saber si el usuario se autenticó.
-        errors
+        errors,
       }}
     >
       {children}

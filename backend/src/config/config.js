@@ -4,7 +4,7 @@ dotenv.config();
 
 //puerto 
 export const settingDotEnvPort = () => {
-  return { port: process.env.PORT || 4000};
+  return { port: process.env.PORT || 6000};
 };
 //base de datos 
 export const settingDotEnvDb = () => {
@@ -16,7 +16,7 @@ export const settingDotEnvDb = () => {
 };
 //palabra secreta del token 
 export const settingSecretToken = () => {
-  return { secret: process.env.SECRET };
+  return { secret: process.env.TOKEN_SECRET || "secret"  };
 };
 
 
