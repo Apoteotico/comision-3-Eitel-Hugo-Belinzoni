@@ -63,6 +63,7 @@ export const login = async (req, res) => {
         id: userFound.id,
         username: userFound.username,
         email: userFound.email,
+        avatarURL: userFound.avatarURL,
       });
     }
   } catch (error) {
@@ -85,6 +86,7 @@ export const profile = async (req, res) => {
       id: userFound.id,
       username: userFound.username,
       email: userFound.email,
+      avatarURL: userFound.avatarURL,
       createdAt: userFound.createdAt,
       updateAt: userFound.updatedAt,
     });

@@ -66,42 +66,52 @@ export const AuthProvider = ({ children }) => {
   // remover cookie token
   const logout = () => {
     Cookies.remove("token");
- /*    localStorage.removeItem("token");  *///para remover el token del localStorage
-    setUser(null);
+    localStorage.removeItem("token");  //para remover el token del localStorage
     setIsAuthenticated(false);
+    setUser(null);
   };
 
   //cookies 3:09:00
   useEffect(() => {
     const checkLogin = async () => {
+      // Obtén las cookies del navegador
       const cookies = Cookies.get();
-
+  
+      // Si no hay un token en las cookies, significa que el usuario no está autenticado
       if (!cookies.token) {
-        setIsAuthenticated(false);
-        setLoading(false);
-        return setUser(null);
+        setIsAuthenticated(false); // Establece que el usuario no está autenticado
+        setLoading(false); // Indica que la carga ha terminado
+        return setUser(null); // Establece que no hay información de usuario
       }
-
+  
       try {
+        // Intenta verificar el token con el servidor
         const res = await verify(cookies.token);
+  
+        // Si el servidor indica que el token no es válido (res.data es falso), el usuario no está autenticado
         if (!res.data) {
-          setIsAuthenticated(false);
-          setLoading(false);
-          setUser(null);
+          setIsAuthenticated(false); // Establece que el usuario no está autenticado
+          setLoading(false); // Indica que la carga ha terminado
+          setUser(null); // Establece que no hay información de usuario
         } else {
-          setIsAuthenticated(true);
-          setUser(res.data);
-          setLoading(false);
+          // Si el token es válido, el usuario está autenticado
+          setIsAuthenticated(true); // Establece que el usuario está autenticado
+          setUser(res.data); // Establece la información del usuario
+          setLoading(false); // Indica que la carga ha terminado
         }
       } catch (error) {
+        // Maneja errores, por ejemplo, si hay problemas al verificar el token
         console.log(error, "error cookies?");
-        setIsAuthenticated(false);
-        setLoading(false);
+        setIsAuthenticated(false); // Establece que el usuario no está autenticado
+        setLoading(false); // Indica que la carga ha terminado
       }
     };
-
-    checkLogin(); // Llamada al checkLogin
-  }, []);
+  
+    // Llama a la función checkLogin cuando el componente se monta
+    checkLogin();
+  
+  }, []); // Este efecto se ejecuta solo al montarse el componente
+  
 
   //si este no funciona usar el ultimo probado
   /*  useEffect(() => {
