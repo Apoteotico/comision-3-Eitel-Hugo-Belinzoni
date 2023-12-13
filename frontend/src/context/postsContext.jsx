@@ -41,7 +41,7 @@ export function PostProvider({ children }) {
     }
   };
 
-  const getPost = async (id) => {
+  const getPostById = async (id) => {
     try {
       const res = await getPostRequest(id);
       return res.data;
@@ -65,7 +65,7 @@ export function PostProvider({ children }) {
         getPosts,
         deletePost,
         createPost,
-        getPost,
+        getPostById,
         updatePost,
       }}
     >

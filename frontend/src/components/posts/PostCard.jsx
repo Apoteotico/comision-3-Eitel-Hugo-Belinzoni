@@ -1,6 +1,7 @@
 // PostCard.jsx
 import { usePosts } from "../../context/postsContext";
 import { Button, ButtonLink, Card } from "../ui";
+import { Link } from "react-router-dom";
 
 export function PostCard({ post }) {
   const { deletePost } = usePosts();
@@ -30,7 +31,10 @@ export function PostCard({ post }) {
         />
       </header>
 
-      <h1 className="text-2xl font-bold my-2">{post.title}</h1>
+      {/* Envuelve el título en un enlace */}
+      <Link to={`/posts/${post._id}`}>
+        <h1 className="text-2xl font-bold my-2">{post.title}</h1>
+      </Link>
 
       <p className="text-slate-300 max-h-16 overflow-hidden">{post.description}</p>
 

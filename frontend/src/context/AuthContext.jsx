@@ -16,21 +16,21 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [errors, setErrors] = useState([]);
-  const [loading, setLoading] = useState(true);
+  //const [loading, setLoading] = useState(true);
 
   const signup = async (user) => {
     try {
       //validando que todo va bien
       const res = await registerRequest(user);
       console.log(res);
-      if (res.status === 200) {
-        setUser(res.data);
-        setIsAuthenticated(true);
-      }
+
+      setUser(res.data);
+      setIsAuthenticated(true);
+
       /*  Cookies.set("token", res.data.message); */
     } catch (error) {
-      console.log(error.response);
-      console.log(error.response.data, "data");
+      // console.log(error.response);
+      //console.log(error.response.data, "data");
       setErrors(error.response.data);
     }
   };
@@ -42,8 +42,8 @@ export const AuthProvider = ({ children }) => {
       console.log(res);
       setUser(res.data);
       setIsAuthenticated(true);
-      console.log(res.data, "authcontext 42");
-      Cookies.set("token", res.data.message); //guardar el token 
+      //console.log(res.data, "authcontext 42");
+      //Cookies.set("token", res.data.message); //guardar el token
     } catch (error) {
       console.error(error);
       if (Array.isArray(error.response.data)) {
@@ -66,7 +66,7 @@ export const AuthProvider = ({ children }) => {
   // remover cookie token
   const logout = () => {
     Cookies.remove("token");
-    localStorage.removeItem("token");  //para remover el token del localStorage
+    //localStorage.removeItem("token");  //para remover el token del localStorage
     setIsAuthenticated(false);
     setUser(null);
   };
@@ -76,42 +76,28 @@ export const AuthProvider = ({ children }) => {
     const checkLogin = async () => {
       // Obtén las cookies del navegador
       const cookies = Cookies.get();
-  
+
       // Si no hay un token en las cookies, significa que el usuario no está autenticado
-      if (!cookies.token) {
-        setIsAuthenticated(false); // Establece que el usuario no está autenticado
-        setLoading(false); // Indica que la carga ha terminado
-        return setUser(null); // Establece que no hay información de usuario
-      }
-  
-      try {
-        // Intenta verificar el token con el servidor
-        const res = await verify(cookies.token);
-  
-        // Si el servidor indica que el token no es válido (res.data es falso), el usuario no está autenticado
-        if (!res.data) {
+      if (cookies.token) {
+        try {
+          const res = await verify(cookies.token);
+          console.log(res);
+          if (res.data) {
+            setIsAuthenticated(true); // Establece que el usuario está autenticado
+            setUser(res.data); // muestra información de usuario
+          } else {
+            setIsAuthenticated(false);
+          }
+        } catch (error) {
           setIsAuthenticated(false); // Establece que el usuario no está autenticado
-          setLoading(false); // Indica que la carga ha terminado
-          setUser(null); // Establece que no hay información de usuario
-        } else {
-          // Si el token es válido, el usuario está autenticado
-          setIsAuthenticated(true); // Establece que el usuario está autenticado
-          setUser(res.data); // Establece la información del usuario
-          setLoading(false); // Indica que la carga ha terminado
+          setUser(null);
         }
-      } catch (error) {
-        // Maneja errores, por ejemplo, si hay problemas al verificar el token
-        console.log(error, "error cookies?");
-        setIsAuthenticated(false); // Establece que el usuario no está autenticado
-        setLoading(false); // Indica que la carga ha terminado
       }
+
+      // Llama a la función checkLogin cuando el componente se monta
+      checkLogin();
     };
-  
-    // Llama a la función checkLogin cuando el componente se monta
-    checkLogin();
-  
   }, []); // Este efecto se ejecuta solo al montarse el componente
-  
 
   //si este no funciona usar el ultimo probado
   /*  useEffect(() => {
@@ -183,7 +169,7 @@ console.log(cookies)
         signup,
         signin,
         logout,
-        loading,
+        /* loading, */
         user,
         isAuthenticated, //para saber si el usuario se autenticó.
         errors,
