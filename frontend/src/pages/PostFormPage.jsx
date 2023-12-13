@@ -4,14 +4,12 @@ import { Button, Card, Input, Label } from "../components/ui";
 import { usePosts } from "../context/postsContext";
 import { Textarea } from "../components/ui/Postarea";
 import { useForm } from "react-hook-form";
+import { useAuth } from "../context/AuthContext";
 
-//para poner fecha manual
-/* import dayjs from "dayjs"; */
-/* import utc from "dayjs/plugin/utc"; */
-/* dayjs.extend(utc); */
 
 export default function PostFormPage() {
   const { createPost, getPost, updatePost } = usePosts();
+  const { user } = useAuth();
   const navigate = useNavigate();
   const params = useParams();
   const {
@@ -26,21 +24,21 @@ export default function PostFormPage() {
       if (params.id) {
         updatePost(params.id, {
           ...data,
-         /*  date: dayjs.utc(data.date).format(), */
+          
         });
       } else {
         createPost({
           ...data,
-          /* date: dayjs.utc(data.date).format(), */
+          
         });
-      } 
+      }
 
-      // navigate("/posts");
+      navigate("/posts");
     } catch (error) {
       console.log(error);
       // window.location.href = "/";
     }
-  }; 
+  };
 
   useEffect(() => {
     const loadPost = async () => {
@@ -48,10 +46,6 @@ export default function PostFormPage() {
         const post = await getPost(params.id);
         setValue("title", post.title);
         setValue("description", post.description);
-        /*   setValue(
-          "date",
-          post.date ? dayjs(post.date).utc().format("YYYY-MM-DD") : ""
-        );  */
         setValue("completed", post.completed);
       }
     };
@@ -61,6 +55,7 @@ export default function PostFormPage() {
   return (
     <Card>
       <form onSubmit={handleSubmit(onSubmit)}>
+        {/* Titulo */}
         <Label htmlFor="title">Title</Label>
         <Input
           type="text"
@@ -72,7 +67,7 @@ export default function PostFormPage() {
         {errors.title && (
           <p className="text-red-500 text-xs italic">Please enter a title.</p>
         )}
-
+        {/* Descripcion */}
         <Label htmlFor="description">Description</Label>
         <Textarea
           name="description"
@@ -81,9 +76,38 @@ export default function PostFormPage() {
           placeholder="Description"
           {...register("description")}
         ></Textarea>
+        {errors.description && (
+          <p className="text-red-500 text-xs italic">
+            Please enter a imageURL.
+          </p>
+        )}
 
-        {/*    <Label htmlFor="date">Date</Label> */}
-        {/* <Input type="date" name="date" {...register("date")} /> */}
+        {/* ImageURL */}
+        <Label htmlFor="imageURL">Image for Post</Label>
+        <Input
+          type="text"
+          name="imageURL"
+          placeholder="ImageURL"
+          {...register("imageURL")}
+          autoFocus
+        />
+
+        {errors.imageURL && (
+          <p className="text-red-500 text-xs italic">
+            Please enter a imageURL.
+          </p>
+        )}
+
+        {/* Autor id */}
+        <Label htmlFor="autor"></Label>
+        <Input type="hidden" {...register("autor")} value={user.id} />
+
+        {errors.autor && (
+          <p className="text-red-500 text-xs italic">
+            Error autor no encontrado.
+          </p>
+        )}
+
         <Button>Save</Button>
       </form>
     </Card>

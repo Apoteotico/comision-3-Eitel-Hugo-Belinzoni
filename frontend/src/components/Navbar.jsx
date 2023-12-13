@@ -35,6 +35,15 @@ export function Navbar() {
               <ButtonLink to="/add-post">Add Post</ButtonLink>
             </li>
             <li>
+              <ButtonLink to="/posts">All Post</ButtonLink>
+            </li>
+            <li>
+              <ButtonLink to="/">Home</ButtonLink>
+            </li>
+            <li>
+              <ButtonLink to="/profile">Profile</ButtonLink>
+            </li>
+            <li>
               {/* si le dan click al botón Logout hay una función, onClick, que ejecuta la función "logout" para quitar las cookies y lo redirecciona a "/" o "/home" */}
               <Link to="/" onClick={() => logout()}>
                 Logout
