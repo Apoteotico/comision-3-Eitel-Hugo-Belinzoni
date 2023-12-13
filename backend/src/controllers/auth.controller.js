@@ -45,16 +45,11 @@ export const login = async (req, res) => {
       return res.status(400).json(["El usuario no esta registrado"]);
     const matchPassword = await bcrypt.compare(password, userFound.password);
     if (!matchPassword) {
-      /*  return res.status(400).json({ message: "Password incorrecto", token: null }); */
-      /* le saque el ,token: null, atencion por si se necesita mas adelante */
       return res.status(400).json(["Password incorrecto"]);
     } else {
       const token = await createAccessToken({ id: userFound._id });
-      res.cookie("token", token, {
-        httpOnly: true,
-        sameSite: "none",
-        secure: true,
-      });
+      res.cookie("token", token);
+
       /*   httpOnly: process.env.NODE_ENV !== "development",*/
       /*   secure: true, 
       sameSite: "none", */
@@ -96,22 +91,45 @@ export const profile = async (req, res) => {
 };
 
 //metodo verify
-
+/* const{secret} = SECRET()
 export const verify = async (req, res) => {
   const { token } = req.cookies;
 
-  if (!token) return res.send(false);
+  if (!token) return res.status(401);
 
-  jwt.verify(token, SECRET, async (error, user) => {
-    if (error) return res.sendStatus(401).json({ message: "Unauthorized" });
+  jwt.verify(token, secret, async (error, user) => {
+    if (error) return res.status(401);
 
     const userFound = await User.findById(user.id);
-    if (!userFound) return res.sendStatus(401);
+    if (!userFound) return res.status(401);
 
     return res.json({
       id: userFound._id,
       username: userFound.username,
       email: userFound.email,
+    });
+  });
+}; */
+
+const { secret } = SECRET();
+//TODO: controller para verificación del token desde el backend
+export const verifyToken = async (req, res) => {
+  const { token } = req.cookies;
+
+  if (!token) return res.status(401).json({ message: "No autorizado" });
+
+  jwt.verify(token, secret, async (err, user) => {
+    if (err) return res.status(401).json({ message: "No autorizado" });
+
+    const userFound = await User.findById(user.id);
+    if (!userFound) return res.status(401).json({ message: "No autorizado" });
+
+    return res.json({
+      message: token,
+      id: userFound._id,
+      username: userFound.username,
+      email: userFound.email,
+      avatarURL: userFound.avatarURL,
     });
   });
 };
