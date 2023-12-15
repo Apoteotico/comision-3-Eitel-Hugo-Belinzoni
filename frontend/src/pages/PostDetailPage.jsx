@@ -2,14 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { usePosts } from "../context/postsContext";
 import { PostCard } from "../components/posts/PostCard";
-import { useAuth } from "../context/AuthContext"; // Asegúrate de importar el contexto de autenticación
+import { useAuth } from "../context/AuthContext";
 import { useForm } from "react-hook-form";
 
 export function PostDetailPage() {
   const { id } = useParams();
-  console.log(id, "id del post");
   const { getPostById, addComment } = usePosts();
-  const { user } = useAuth(); // Obtén el usuario autenticado
+  const { user } = useAuth();
   const [post, setPost] = useState(null);
   const [comments, setComments] = useState([]);
   const { register, handleSubmit, setValue } = useForm();
@@ -17,9 +16,9 @@ export function PostDetailPage() {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const post = await getPostById(id);
-        setPost(post);
-        setComments(post.comments); // Actualiza los comentarios al cargar el post
+        const fetchedPost = await getPostById(id);
+        setPost(fetchedPost);
+        setComments(fetchedPost.comments);
       } catch (error) {
         console.error("Error fetching post:", error);
       }
@@ -30,14 +29,23 @@ export function PostDetailPage() {
 
   const onSubmitComment = async (data) => {
     try {
-      console.log(data);
-      // Agrega el comentario utilizando la función addComment del contexto de posts
-      await addComment(id, { description: data.description });
+      console.log("Comment Data:", data); // Verificar los datos del comentario
 
-      // Recarga los comentarios después de agregar uno nuevo
+      const commentData = {
+        autor: user.id,
+        ...data,
+      };
+      console.log("Formatted Comment Data:", commentData); // Verificar los datos formateados
+
+      await addComment(id, commentData);
+      
+      // Recargar los comentarios después de agregar uno nuevo
       const updatedPost = await getPostById(id);
+      console.log("Updated Post after adding comment:", updatedPost);
+
       setComments(updatedPost.comments);
-      setValue("description", ""); // Limpia el campo de descripción del formulario
+      setValue("description", "");
+      setPost(updatedPost);
     } catch (error) {
       console.error("Error adding comment:", error);
     }
@@ -48,16 +56,12 @@ export function PostDetailPage() {
   }
 
   return (
-    <>
-      <div className="m-4">
-        <PostCard post={post} key={post._id} />
-      </div>
+    <div className="m-4">
+      <PostCard post={post} key={post?._id} />
 
-      {/* Sección de comentarios */}
-      <div className="m-4">
+      <div className="mt-8 p-6 bg-white rounded-lg shadow-md">
         <h2 className="text-xl font-semibold mb-4">Comments</h2>
 
-        {/* Formulario para agregar comentarios */}
         {user && (
           <form onSubmit={handleSubmit(onSubmitComment)}>
             <textarea
@@ -71,15 +75,18 @@ export function PostDetailPage() {
           </form>
         )}
 
-        {/* Lista de comentarios */}
-        <ul>
-          {comments.map((comment) => (
-            <li key={comment._id}>
-              <strong>{comment.autor?.username || "Anonymous"}:</strong> {comment.description}
-            </li>
+        <div className="mt-6">
+          {comments.map((comment, index) => (
+            <div key={index} className="mb-4 p-4 bg-gray-100 rounded-lg">
+              <div className="flex items-center mb-2">
+                <strong className="mr-2 text-blue-600">{user.username}:</strong>
+                <span className="text-gray-500 text-sm">{comment.createdAt}</span>
+              </div>
+              <p className="text-gray-800 text-lg">{comment.description}</p>
+            </div>
           ))}
-        </ul>
+        </div>
       </div>
-    </>
+    </div>
   );
 }
