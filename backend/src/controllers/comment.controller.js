@@ -55,7 +55,7 @@ export const createComment = async (req, res) => {
 
     // Crear el comentario con la referencia al post
     const newComment = new Comment({ autor, description, post: postId });
-    
+    console.log(postId)
     // Guardar el comentario en la base de datos
     const commentSaved = await newComment.save();
 

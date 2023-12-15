@@ -5,7 +5,7 @@ export const registerRequest = async (user) => axios.post(`/register`, user);
 export const loginRequest = async (user) => axios.post(`/login`, user);
 
 /* export const verifyTokenRequest = () => axios.get(`/verify`);  */
-export const verify = () => axios.get(`/verify`);
+export const verify = () => axios.get(`/verifyToken`);
 
 /* import axios from "./axios";
 

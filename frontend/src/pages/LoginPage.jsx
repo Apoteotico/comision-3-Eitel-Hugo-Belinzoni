@@ -15,7 +15,7 @@ function LoginPage() {
     try {
       await signin(data);
       // Después de iniciar sesión con éxito, redirige al usuario a /posts
-      navigate("/posts");  // Utiliza la función de navegación para cambiar de ruta
+      //navigate("/posts");  // Utiliza la función de navegación para cambiar de ruta
     } catch (error) {
       console.error("Error during login:", error);
     }

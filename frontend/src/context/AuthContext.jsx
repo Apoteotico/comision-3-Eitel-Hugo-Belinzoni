@@ -77,26 +77,24 @@ export const AuthProvider = ({ children }) => {
       // Obtén las cookies del navegador
       const cookies = Cookies.get();
 
-      // Si no hay un token en las cookies, significa que el usuario no está autenticado
       if (cookies.token) {
         try {
           const res = await verify(cookies.token);
           console.log(res);
           if (res.data) {
-            setIsAuthenticated(true); // Establece que el usuario está autenticado
-            setUser(res.data); // muestra información de usuario
+            setIsAuthenticated(true); 
+            setUser(res.data); 
           } else {
             setIsAuthenticated(false);
           }
         } catch (error) {
-          setIsAuthenticated(false); // Establece que el usuario no está autenticado
+          setIsAuthenticated(false); 
           setUser(null);
         }
       }
-
-      // Llama a la función checkLogin cuando el componente se monta
-      checkLogin();
+      
     };
+    checkLogin();
   }, []); // Este efecto se ejecuta solo al montarse el componente
 
   //si este no funciona usar el ultimo probado

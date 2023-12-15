@@ -16,3 +16,6 @@ export const updatePostRequest = async (post) =>
 //para eliminar
 export const deletePostRequest = async (id) => axios.delete(`/posts/${id}`);
 
+// Agregar la función para crear comentarios
+export const createCommentRequest = async (comment) =>
+  axios.post(`/comments/${post._id}`, comment);

@@ -1,3 +1,4 @@
+import React from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { ButtonLink } from "./ui/ButtonLink";
@@ -5,20 +6,15 @@ import { ButtonLink } from "./ui/ButtonLink";
 export function Navbar() {
   const { isAuthenticated, logout, user } = useAuth();
 
-  // si user is autenticated, muestra avatar, sino avatarURL = null.
+  // Si el usuario está autenticado, muestra el avatar, de lo contrario, avatarURL = null.
   const avatarURL = isAuthenticated ? user.avatarURL : null;
-
-  console.log(isAuthenticated, user);
-  console.log("User Info:", user, "para ver si está la urlimage");
 
   return (
     <nav className="bg-zinc-700 my-3 flex justify-between py-5 px-10 rounded-lg items-center">
       <h1 className="text-2xl font-bold">
-        {/* verifica, si está autenticado entra a /Posts o posts, sino entra a / o home */}
         <Link to={isAuthenticated ? "/posts" : "/"}>Post Manager</Link>
       </h1>
       <ul className="flex gap-x-2 items-center">
-        {/* si está autenticado saluda al usuario con su nombre y muestra el boton Logout en el navbar */}
         {isAuthenticated ? (
           <>
             <li>
@@ -26,16 +22,16 @@ export function Navbar() {
                 <img
                   src={avatarURL}
                   alt="User Avatar"
-                  className="w-16 h-16 rounded-full object-cover"
+                  className="w-10 h-10 rounded-full object-cover"
                 />
               )}
             </li>
-            <li>Welcome {user.username}</li>
+            <li className="hidden md:block">Welcome, {user.username}</li>
             <li>
               <ButtonLink to="/add-post">Add Post</ButtonLink>
             </li>
             <li>
-              <ButtonLink to="/posts">All Post</ButtonLink>
+              <ButtonLink to="/posts">All Posts</ButtonLink>
             </li>
             <li>
               <ButtonLink to="/">Home</ButtonLink>
@@ -44,15 +40,15 @@ export function Navbar() {
               <ButtonLink to="/profile">Profile</ButtonLink>
             </li>
             <li>
-              {/* si le dan click al botón Logout hay una función, onClick, que ejecuta la función "logout" para quitar las cookies y lo redirecciona a "/" o "/home" */}
-              <Link to="/" onClick={() => logout()}>
+              <button
+                onClick={() => logout()}
+                className="text-white hover:text-gray-300 transition duration-300 focus:outline-none"
+              >
                 Logout
-              </Link>
-              {/* la función logout va en authContext.jsx */}
+              </button>
             </li>
           </>
         ) : (
-          /* si no está autenticado, muestra los botones de login y register en el navbar */
           <>
             <li>
               <ButtonLink to="/login">Login</ButtonLink>
@@ -66,3 +62,4 @@ export function Navbar() {
     </nav>
   );
 }
+

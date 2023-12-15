@@ -1,11 +1,10 @@
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button, Card, Input, Label } from "../components/ui";
 import { usePosts } from "../context/postsContext";
 import { Textarea } from "../components/ui/Postarea";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../context/AuthContext";
-
 
 export default function PostFormPage() {
   const { createPost, getPost, updatePost } = usePosts();
@@ -21,36 +20,43 @@ export default function PostFormPage() {
 
   const onSubmit = async (data) => {
     try {
+      // Agrega la firma del autor en un nuevo renglón
+      data.description += `\n\nPosted by ${user?.username || "Anonymous"}`;
+
       if (params.id) {
         updatePost(params.id, {
           ...data,
-          
         });
       } else {
         createPost({
           ...data,
-          
+          author: user?.id || "Anonymous",
         });
       }
 
       navigate("/posts");
     } catch (error) {
       console.log(error);
-      // window.location.href = "/";
+      // Manejar el error, por ejemplo, mostrando un mensaje al usuario
     }
   };
 
   useEffect(() => {
     const loadPost = async () => {
-      if (params.id) {
-        const post = await getPost(params.id);
-        setValue("title", post.title);
-        setValue("description", post.description);
-        setValue("completed", post.completed);
+      try {
+        if (params.id) {
+          const post = await getPost(params.id);
+          setValue("title", post.title);
+          setValue("description", post.description);
+          setValue("completed", post.completed);
+        }
+      } catch (error) {
+        console.log(error);
+        // Manejar el error, por ejemplo, mostrando un mensaje al usuario
       }
     };
     loadPost();
-  }, []);
+  }, [params.id, getPost, setValue]);
 
   return (
     <Card>
@@ -78,7 +84,7 @@ export default function PostFormPage() {
         ></Textarea>
         {errors.description && (
           <p className="text-red-500 text-xs italic">
-            Please enter a imageURL.
+            Please enter a description.
           </p>
         )}
 
@@ -94,17 +100,21 @@ export default function PostFormPage() {
 
         {errors.imageURL && (
           <p className="text-red-500 text-xs italic">
-            Please enter a imageURL.
+            Please enter an imageURL.
           </p>
         )}
 
         {/* Autor id */}
-        <Label htmlFor="autor"></Label>
-        <Input type="hidden" {...register("autor")} value={user.id} />
+        <Label htmlFor="author"></Label>
+        <Input
+          type="hidden"
+          {...register("author")}
+          value={user?.id || "Anonymous"}
+        />
 
-        {errors.autor && (
+        {errors.author && (
           <p className="text-red-500 text-xs italic">
-            Error autor no encontrado.
+            Error al obtener el nombre del autor.
           </p>
         )}
 
