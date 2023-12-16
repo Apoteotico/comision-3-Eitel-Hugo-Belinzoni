@@ -18,6 +18,8 @@ function RegisterPage() {
   }, [isAuthenticated]);
 
   const onSubmit = handleSubmit(async (values) => {
+    console.log("Form Values:", values); // Agrega este console.log para ver los valores de 'values'
+  console.log("Username:", values.username); // Agrega este console.log para ver el valor de 'username'
     await signup(values);
   });
 

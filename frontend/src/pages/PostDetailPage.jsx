@@ -11,6 +11,7 @@ export function PostDetailPage() {
   const { user } = useAuth();
   const [post, setPost] = useState(null);
   const [comments, setComments] = useState([]);
+  const [forceRerender, setForceRerender] = useState(false); // Nuevo estado para forzar la rerenderización
   const { register, handleSubmit, setValue } = useForm();
 
   useEffect(() => {
@@ -25,27 +26,31 @@ export function PostDetailPage() {
     };
 
     fetchPost();
-  }, [id, getPostById]);
+  }, [id, getPostById, forceRerender]); // Agregado forceRerender como dependencia
 
   const onSubmitComment = async (data) => {
     try {
-      console.log("Comment Data:", data); // Verificar los datos del comentario
-
+      console.log(data); // Verificar los datos del comentario
+      
       const commentData = {
-        autor: user.id,
+        autor: post.autor,
+        createdAt: createdAt,
         ...data,
       };
       console.log("Formatted Comment Data:", commentData); // Verificar los datos formateados
-
-      await addComment(id, commentData);
+      console.log("Formatted Comment Data:", commentData.description);
+      await addComment(id, commentData, data);
       
       // Recargar los comentarios después de agregar uno nuevo
       const updatedPost = await getPostById(id);
       console.log("Updated Post after adding comment:", updatedPost);
 
       setComments(updatedPost.comments);
+      console.log("Comments after update:", updatedPost.comments);
+      console.log("Comment Description:", commentData.description);
       setValue("description", "");
       setPost(updatedPost);
+      setForceRerender((prev) => !prev); // Cambiar el estado para forzar la rerenderización
     } catch (error) {
       console.error("Error adding comment:", error);
     }
@@ -76,13 +81,13 @@ export function PostDetailPage() {
         )}
 
         <div className="mt-6">
-          {comments.map((comment, index) => (
+          {comments.map((commentData, index) => (
             <div key={index} className="mb-4 p-4 bg-gray-100 rounded-lg">
               <div className="flex items-center mb-2">
-                <strong className="mr-2 text-blue-600">{user.username}:</strong>
-                <span className="text-gray-500 text-sm">{comment.createdAt}</span>
+                <strong className="mr-2 text-blue-600">{user.username}:</strong>            
+                <span className="text-gray-500 text-sm">{commentData.createdAt}</span>
               </div>
-              <p className="text-gray-800 text-lg">{comment.description}</p>
+              <p className="text-gray-800 text-lg">{commentData.description}</p>
             </div>
           ))}
         </div>
