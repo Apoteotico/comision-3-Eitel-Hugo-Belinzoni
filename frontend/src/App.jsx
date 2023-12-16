@@ -24,9 +24,9 @@ function App() {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/posts" element={<PostsPage />} />
-            <Route path="/add-post" element={<PostFormPage />} />
             <Route path="/posts/:id" element={<PostDetailPage />} /> {/* Utiliza el nuevo componente para el detalle del post */}
             <Route element={<ProtectedRoute />}>
+              <Route path="/add-post" element={<PostFormPage />} /> 
               <Route path="/profile" element={<ProfilePage />} />
             </Route>
           </Routes>
