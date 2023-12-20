@@ -5,7 +5,8 @@ import {
   getPostsRequest,
   getPostRequest,
   updatePostRequest,
-  createCommentRequest, // Agrega la función para crear comentarios
+  createCommentRequest,
+  getCommentById as fetchCommentById, // Cambié el nombre de la importación
 } from "../api/posts";
 
 const PostContext = createContext();
@@ -73,6 +74,15 @@ export function PostProvider({ children }) {
     }
   };
 
+  const getCommentById = async (id) => {
+    try {
+      const res = await fetchCommentById(id); // Cambié el nombre de la función aquí
+      return res.data;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <PostContext.Provider
       value={{
@@ -83,6 +93,7 @@ export function PostProvider({ children }) {
         getPostById,
         updatePost,
         addComment,
+        getCommentById,
       }}
     >
       {children}

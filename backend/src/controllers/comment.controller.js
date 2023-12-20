@@ -55,20 +55,20 @@ export const createComment = async (req, res) => {
 
     // Crear el comentario con la referencia al post
     const newComment = new Comment({ autor, description, post: postId });
-    console.log(postId)
+
     // Guardar el comentario en la base de datos
     const commentSaved = await newComment.save();
 
     // Añadir el comentario al array de comentarios del post
     existingPost.comments.push(commentSaved._id);
-    
+
     // Guardar el post actualizado
     await existingPost.save();
 
     res.status(201).json(commentSaved);
   } catch (error) {
     console.error("Error al crear un nuevo comentario:", error);
-    res.status(400).json({ message: "Error al crear un nuevo comentario", details: error.message });
+    res.status(500).json({ message: "Error al crear un nuevo comentario", details: error.message });
   }
 };
 
@@ -80,6 +80,13 @@ export const deleteComment = async (req, res) => {
     if (!deletedComment) {
       return res.status(404).json({ error: "Comentario no encontrado" });
     }
+
+    // Eliminar el comentario del array de comentarios del post
+    const postId = deletedComment.post;
+    const existingPost = await Post.findById(postId);
+    existingPost.comments.pull(deletedComment._id);
+    await existingPost.save();
+
     res.status(204).end();
   } catch (error) {
     res.status(500).json({ error: "Error al eliminar el comentario" });

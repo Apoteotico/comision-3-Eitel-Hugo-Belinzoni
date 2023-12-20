@@ -20,6 +20,9 @@ export const deletePostRequest = async (id) => axios.delete(`/posts/${id}`);
 export const createCommentRequest = async (id, comment) =>
   axios.post(`/comments/${id}`, comment);
 
+  export const getCommentById = async (id) =>
+  axios.get(`/comments/${id}`);
+  
 /* export const createCommentRequest = async (comment) =>
   axios.post(`/comments/${post._id}`, comment);
  */
