@@ -5,6 +5,10 @@ Proyecto Final Epica Tramo III
 - Asegúrate de tener Node.js instalado en tu máquina.
 - Necesitarás tener MongoDB instalado y ejecutar los servicios `mongod` y `mongocompass`.
 
+ejecutar de forma rapida: 
+
+abrir terminal en backend y frontend, luego ejecutar npm i en ambos, cambiar el nombre de example.env a .env, ejecutar npm run dev en ambas terminales, tener ejecutado mongod y mongodb-compass. 
+
 ## Configuración Inicial
 
 1. Cambia el nombre del archivo `.example.env` por `.env`.
@@ -77,3 +81,4 @@ POST localhost:6060/api/logout
 
 Descripción: Cierra sesión del usuario autenticado.
 Uso: Envia una solicitud POST a esta ruta para cerrar sesión del usuario autenticado.
+
